@@ -18,9 +18,9 @@ namespace MusicRecordApi.Controllers
         [HttpGet]
         [EnableCors("ReadOnly")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetAllRecords()
+        public IActionResult GetAllRecords([FromQuery] string? title, [FromQuery] string? artist, [FromQuery] string? genre, [FromQuery] int? year)
         {
-            var records = _recordRepository.GetAllRecords();
+            var records = _recordRepository.GetAllRecords(title, artist, genre, year);
             return Ok(records);
         }
 
