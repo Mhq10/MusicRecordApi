@@ -16,6 +16,23 @@ namespace MusicRecordApi.Repositories
             
         }
 
+        public Record AddRecord(Record record)
+        {
+            _data.Add(record);
+            return record;
+        }
+
+        public Record? DeleteRecord(int id)
+        {
+            var record = _data.FirstOrDefault(r => r.Id == id);
+
+            if (record != null)
+            {
+                _data.Remove(record);
+            }
+            return record;
+        }
+
         public List<Record> GetAllRecords(string? title = null, string? artist = null, string? genre = null, int? year = null)
         {
 
@@ -39,6 +56,22 @@ namespace MusicRecordApi.Repositories
             }
 
             return _records;
+        }
+
+        public Record UpdateRecord(Record record)
+        {
+
+            var existingRecord = _data.FirstOrDefault(r => r.Id == record.Id);
+            if (existingRecord != null)
+            {
+                existingRecord.Title = record.Title;
+                existingRecord.Artist = record.Artist;
+                existingRecord.Duration = record.Duration;
+                existingRecord.Genre = record.Genre;
+                existingRecord.Year = record.Year;
+            }
+
+            return existingRecord ?? throw new ArgumentException("Record not found");
         }
     }
 }
