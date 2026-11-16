@@ -1,34 +1,34 @@
-﻿using MusicRecordApi.Interfaces;
+﻿using MusicRecordApi.Context;
+using MusicRecordApi.Interfaces;
 using MusicRecordApi.Models;
 
 namespace MusicRecordApi.Repositories
 {
     public class RecordsRepository : IRecordInterface
     {
-        private List<Record> _data = new List<Record>
+        private RecordContext _context;
+        
+        
+        public RecordsRepository(RecordContext context)
         {
-            new Record { Id = 1, Title = "Back in Black", Artist = "ACDC", Duration = 180, Genre = "Rock", Year = 2020 },
-            new Record { Id = 2, Title = "Painkiller", Artist = "Judas Priest", Duration = 200, Genre = "Hard Rock", Year = 2021 },
-            new Record { Id = 3, Title = "The Eminem Show", Artist = "Eminem", Duration = 150, Genre = "Hip Hop", Year = 2019 }
-        };
-        public RecordsRepository()
-        {
-            
+            _context = context;
         }
 
         public Record AddRecord(Record record)
         {
-            _data.Add(record);
+            _context.Record.Add(record);
+            _context.SaveChanges();
             return record;
         }
 
         public Record? DeleteRecord(int id)
         {
-            var record = _data.FirstOrDefault(r => r.Id == id);
+            var record = _context.Record.FirstOrDefault(r => r.Id == id);
 
             if (record != null)
             {
-                _data.Remove(record);
+                _context.Record.Remove(record);
+                _context.SaveChanges();
             }
             return record;
         }
@@ -36,7 +36,7 @@ namespace MusicRecordApi.Repositories
         public List<Record> GetAllRecords(string? title = null, string? artist = null, string? genre = null, int? year = null)
         {
 
-            List<Record> _records = _data;
+            List<Record> _records = _context.Record.ToList();
 
             if (title != null)
             {
@@ -61,7 +61,7 @@ namespace MusicRecordApi.Repositories
         public Record UpdateRecord(Record record)
         {
 
-            var existingRecord = _data.FirstOrDefault(r => r.Id == record.Id);
+            var existingRecord = _context.Record.FirstOrDefault(r => r.Id == record.Id);
             if (existingRecord != null)
             {
                 existingRecord.Title = record.Title;
@@ -69,6 +69,8 @@ namespace MusicRecordApi.Repositories
                 existingRecord.Duration = record.Duration;
                 existingRecord.Genre = record.Genre;
                 existingRecord.Year = record.Year;
+                _context.Update(existingRecord);
+                _context.SaveChanges();
             }
 
             return existingRecord ?? throw new ArgumentException("Record not found");

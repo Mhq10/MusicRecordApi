@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="env.json" />
+  </Folder>
   <Project Path="MusicRecordApi/MusicRecordApi.csproj" />
   <Project Path="MusicRecordTest/MusicRecordTest.csproj" />
 </Solution>

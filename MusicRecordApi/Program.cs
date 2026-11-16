@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MusicRecordApi.Context;
 using MusicRecordApi.Interfaces;
 using MusicRecordApi.Repositories;
 using System.Text;
@@ -16,7 +18,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<IRecordInterface, RecordsRepository>();
+builder.Services.AddScoped<IRecordInterface, RecordsRepository>();
+
+//Database
+builder.Configuration.AddJsonFile("env.json", optional: false, reloadOnChange: true);
+
+builder.Services.AddDbContext<RecordContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection")));
 
 // CORS
 builder.Services.AddCors(options =>
