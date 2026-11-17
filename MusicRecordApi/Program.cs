@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins("http://127.0.0.1:5500")
+        builder.WithOrigins("https://musicrecordapi-gfhghdbpdncqgrgp.swedencentral-01.azurewebsites.net/")
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
